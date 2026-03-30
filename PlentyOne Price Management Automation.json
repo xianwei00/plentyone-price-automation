@@ -1,0 +1,3616 @@
+{
+  "name": "PlentyOne Price Management",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://YOUR_PLENTYONE_INSTANCE.my.plentysystems.com/rest/login",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"username\": \"YOUR_PLENTYONE_USERNAME\", \"password\": \"YOUR_PLENTYONE_PASSWORD\"}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        640,
+        800
+      ],
+      "id": "54101b30-4bb9-4e14-9cc2-62be2afbc04a",
+      "name": "Fetch Access Token"
+    },
+    {
+      "parameters": {
+        "url": "https://YOUR_INSTANCE.my.plentysystems.com/rest/items/variations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "variationTagId",
+              "value": "16"
+            },
+            {
+              "name": "with",
+              "value": "variationSalesPrices,Stock"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.accessToken }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        928,
+        800
+      ],
+      "id": "ab3626ad-9d1f-47b7-98b2-ef4159a7d191",
+      "name": "Fetch Item Variations Tag ID 16"
+    },
+    {
+      "parameters": {
+        "url": "https://YOUR_INSTANCE.my.plentysystems.com/rest/items/variations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "variationTagId",
+              "value": "17"
+            },
+            {
+              "name": "with",
+              "value": "variationSalesPrices,Stock"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.accessToken }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        928,
+        1088
+      ],
+      "id": "d95d241b-31ce-44f8-917d-7cd4debe6279",
+      "name": "Fetch Item Variations Tag ID 17"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "entries",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        800
+      ],
+      "id": "ded4b427-37fc-42e5-a3a4-92f1f4f4fe6e",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "entries",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        1088
+      ],
+      "id": "1c0e9be0-7c82-44d7-83a1-539eed7f39bf",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1328,
+        800
+      ],
+      "id": "af02ca96-c8fa-4bc4-b50b-7a4fc1e0d67f",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "69caaf15-4d25-4d72-a739-b5d8214a1687",
+              "name": "tagId",
+              "value": "16",
+              "type": "string"
+            },
+            {
+              "id": "28ab8115-40cc-4da2-bdeb-84270a26d2f2",
+              "name": "variantId",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "fdbed8d8-eebf-455d-af15-34bc20430fdd",
+              "name": "itemId",
+              "value": "={{ $json.itemId }}",
+              "type": "number"
+            },
+            {
+              "id": "2c54fec4-df54-4fff-bc8c-5448f902369f",
+              "name": "number",
+              "value": "={{ $json.number }}",
+              "type": "string"
+            },
+            {
+              "id": "f57a4581-3b04-4974-94a6-29511be60298",
+              "name": "netStock",
+              "value": "={{ $json.Stock[0].netStock }}",
+              "type": "number"
+            },
+            {
+              "id": "6c369518-b3ab-4aa2-abd3-0830235aac57",
+              "name": "EK",
+              "value": "={{ $json.purchasePrice }}",
+              "type": "number"
+            },
+            {
+              "id": "14b3d021-6238-4222-8264-c49badbada79",
+              "name": "variationSalesPrices3.salesPriceId",
+              "value": "={{ $json.variationSalesPrices[1].salesPriceId }}",
+              "type": "number"
+            },
+            {
+              "id": "6abb86bb-2d12-47c1-b70a-6b092c20589d",
+              "name": "variationSalesPrices3.price3",
+              "value": "={{ $json.variationSalesPrices[1].price }}",
+              "type": "number"
+            },
+            {
+              "id": "4459ee1c-fd38-46c4-8b58-0cf51d0f44b7",
+              "name": "variationSalesPrices17.salesPriceId",
+              "value": "={{ $json.variationSalesPrices[6].salesPriceId }}",
+              "type": "number"
+            },
+            {
+              "id": "cdc683e0-6845-48a0-beb4-dce92992f5b6",
+              "name": "variationSalesPrices17.price17",
+              "value": "={{ $json.variationSalesPrices[6].price }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1552,
+        784
+      ],
+      "id": "10b78bf9-6e16-46b3-979c-959d6e06a2f8",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1392,
+        1088
+      ],
+      "id": "9484804b-a801-4c5e-a3fd-970c1942390d",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2016,
+        784
+      ],
+      "id": "295ae699-e4df-4cbc-bff7-b0ef5522879a",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "40f4e983-e543-4a73-84bb-e50a5d150e80",
+              "leftValue": "={{ $json.netStock }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        2272,
+        784
+      ],
+      "id": "ea523723-8ef3-41b2-a68c-339dfd85b71a",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "url": "https://YOUR_INSTANCE.my.plentysystems.com/rest/orders",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "createdAtFrom",
+              "value": "={{new Date(Date.now() - 24*60*60*1000).toISOString().slice(0,19)}}+01:00"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.access_token }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        960,
+        544
+      ],
+      "id": "b9c007a6-8ba5-4fdb-bacb-6b31c225375b",
+      "name": "Fetch Recent Orders (last 24h)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const soldVariantIds = new Set();\n\nconst ordersData = $input.first().json;\nconst orders = ordersData.entries || [];\n\nfor (const order of orders) {\n  if (order.typeId !== 1) continue;\n  if (order.orderItems) {\n    for (const item of order.orderItems) {\n      if (item.typeId === 1 && item.itemVariationId) {\n        soldVariantIds.add(item.itemVariationId);\n      }\n    }\n  }\n}\n\n// Output each sold ID as a separate object\nconst result = [];\nfor (const id of soldVariantIds) {\n  result.push({ soldVariantId: id });\n}\nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        544
+      ],
+      "id": "805c64d0-1a41-48bd-99c2-118afe492980",
+      "name": "Extract Sold IDs"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "plentyone",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1980995272,
+          "mode": "list",
+          "cachedResultName": "State",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=1980995272"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2736,
+        656
+      ],
+      "id": "38b02c2a-52c7-41ef-bd95-b3f889b3cb1d",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "YOUR_GOOGLE_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2448,
+        656
+      ],
+      "id": "22a33f68-ab49-4296-aa4e-e158fd6035cf",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "36a61283-4a82-44db-9020-6b1668896128",
+              "name": "floorPrice16",
+              "value": "={{ ((parseFloat($json[\"EK\"]) + 3.84) / 0.81 / 0.89) + 8.96 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1760,
+        800
+      ],
+      "id": "fbdacf80-1432-4548-8fc0-dad71a1d40a1",
+      "name": "floorPrice16 Calculation"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7a3bfb43-7156-4573-b1b8-d68398b96b1f",
+              "name": "floorPrice17",
+              "value": "={{ ((parseFloat($json[\"EK\"]) + 0.84) / 0.81 / 0.89) + 8.96 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1856,
+        1088
+      ],
+      "id": "15270451-aed2-4d82-88ca-9f3664f9523e",
+      "name": "floorPrice17 Calculation"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "69caaf15-4d25-4d72-a739-b5d8214a1687",
+              "name": "tagId",
+              "value": "17",
+              "type": "string"
+            },
+            {
+              "id": "28ab8115-40cc-4da2-bdeb-84270a26d2f2",
+              "name": "variantId",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "fdbed8d8-eebf-455d-af15-34bc20430fdd",
+              "name": "itemId",
+              "value": "={{ $json.itemId }}",
+              "type": "number"
+            },
+            {
+              "id": "2c54fec4-df54-4fff-bc8c-5448f902369f",
+              "name": "number",
+              "value": "={{ $json.number }}",
+              "type": "string"
+            },
+            {
+              "id": "f57a4581-3b04-4974-94a6-29511be60298",
+              "name": "netStock",
+              "value": "={{ $json.Stock[0].netStock }}",
+              "type": "number"
+            },
+            {
+              "id": "6c369518-b3ab-4aa2-abd3-0830235aac57",
+              "name": "EK",
+              "value": "={{ $json.purchasePrice }}",
+              "type": "number"
+            },
+            {
+              "id": "14b3d021-6238-4222-8264-c49badbada79",
+              "name": "variationSalesPrices3.salesPriceId",
+              "value": "={{ $json.variationSalesPrices[1].salesPriceId }}",
+              "type": "number"
+            },
+            {
+              "id": "6abb86bb-2d12-47c1-b70a-6b092c20589d",
+              "name": "variationSalesPrices3.price3",
+              "value": "={{ $json.variationSalesPrices[1].price }}",
+              "type": "number"
+            },
+            {
+              "id": "4459ee1c-fd38-46c4-8b58-0cf51d0f44b7",
+              "name": "variationSalesPrices17.salesPriceId",
+              "value": "={{ $json.variationSalesPrices[6].salesPriceId }}",
+              "type": "number"
+            },
+            {
+              "id": "cdc683e0-6845-48a0-beb4-dce92992f5b6",
+              "name": "variationSalesPrices17.price17",
+              "value": "={{ $json.variationSalesPrices[6].price }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1632,
+        1088
+      ],
+      "id": "e9d7fef5-0cd0-4888-b760-d220de288c2f",
+      "name": "Set fields"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "Variant ID",
+              "field2": "variantId"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2896,
+        768
+      ],
+      "id": "1f83a22b-893f-4723-93b3-fa1654220b5f",
+      "name": "Merge Variants with State",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "soldVariantId",
+              "field2": "variantId"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2224,
+        576
+      ],
+      "id": "a256b704-18eb-4ccc-b13c-32f55fc056b2",
+      "name": "Merge Variant with soldId",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "plentyone",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1980995272,
+          "mode": "list",
+          "cachedResultName": "State",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=1980995272"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Variant ID": "={{ $json.variantId }}",
+            "Last Sale Date": "={{ new Date().toISOString().slice(0,10) }}",
+            "Days No Sale": "0"
+          },
+          "matchingColumns": [
+            "Variant ID"
+          ],
+          "schema": [
+            {
+              "id": "Variant ID",
+              "displayName": "Variant ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Variant Nr",
+              "displayName": "Variant Nr",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tag ID",
+              "displayName": "Tag ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Current Stage",
+              "displayName": "Current Stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Price ID 3",
+              "displayName": "Price ID 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Current Price 17",
+              "displayName": "Current Price 17",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "EK",
+              "displayName": "EK",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Floor Price",
+              "displayName": "Floor Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Price Change",
+              "displayName": "Last Price Change",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Sale Date",
+              "displayName": "Last Sale Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Days at Floor",
+              "displayName": "Days at Floor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Days No Sale",
+              "displayName": "Days No Sale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2416,
+        400
+      ],
+      "id": "cd365048-a47a-4a71-8529-e04940d844f6",
+      "name": "Update Last Sale Date & Days No Sale",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "YOUR_GOOGLE_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function round2(n) { return Math.round(n * 100) / 100; }\n\nfunction parseDate(val) {\n  if (!val || val === '' || val === 'null') return null;\n  const d = new Date(val);\n  return isNaN(d.getTime()) ? null : d;\n}\n\nfunction daysBetween(from, to) {\n  if (!from) return 999;\n  return Math.floor((to - from) / (1000 * 60 * 60 * 24));\n}\n\nconst today = new Date();\nconst result = [];\n\nfor (const item of $input.all()) {\n  const j = item.json;\n\n  // floorPrice: string from Calc nodes, parseFloat handles it\n  const floorPrice = round2(\n    j.tagId === '16'\n      ? parseFloat(j.floorPrice16 || 0)\n      : parseFloat(j.floorPrice17 || 0)\n  );\n\n  // price3: nested object from Edit Fields / Set fields\n  const price3 = round2(parseFloat(\n    (j.variationSalesPrices3 && j.variationSalesPrices3.price3)\n    || 0\n  ));\n\n  // currentPrice17: nested object, 0 = not set (treat as null)\n  const rawPrice17 = parseFloat(\n    (j.variationSalesPrices17 && j.variationSalesPrices17.price17)\n    || 0\n  );\n  const currentPrice17 = rawPrice17 === 0 ? null : round2(rawPrice17);\n\n  // State fields from Google Sheets (column names with spaces)\n  const currentStage = j['Current Stage'] || j.currentStage || 'UNINITIALIZED';\n  const daysAtFloorCounter = parseInt(j['Days at Floor'] || j.daysAtFloorCounter || 0, 10);\n\n  const lastPriceChangeDate = parseDate(j['Last Price Change'] || j.lastPriceChangeDate || null);\n  const lastSaleDate = parseDate(j['Last Sale Date'] || j.lastSaleDate || null);\n\n  // 999 = sentinel for \"never happened\" → ensures stage1_init triggers on first run\n  const daysSinceLastChange = daysBetween(lastPriceChangeDate, today);\n  const daysSinceLastSale = daysBetween(lastSaleDate, today);\n\n  // soldToday: soldVariantId present and matches this variant's Variant ID\n  const varId = Number(j.variantId || j['Variant ID']);\n  const soldToday = (j.soldVariantId !== undefined && j.soldVariantId !== null)\n    && (Number(j.soldVariantId) === varId);\n\n  result.push({\n    json: {\n      variantId: varId,\n      itemId: Number(j.itemId || j['Item ID']),\n      number: j.number || j['Variant Nr'],\n      tagId: String(j.tagId || j['Tag ID']),\n      netStock: Number(j.netStock),\n      EK: round2(parseFloat(j.EK || 0)),\n      price3,\n      currentPrice17,\n      floorPrice,\n      currentStage,\n      daysAtFloorCounter,\n      lastPriceChangeDate: lastPriceChangeDate ? lastPriceChangeDate.toISOString() : null,\n      lastSaleDate: lastSaleDate ? lastSaleDate.toISOString() : null,\n      daysSinceLastChange,\n      daysSinceLastSale,\n      soldToday\n    }\n  });\n}\n\nreturn result;"
+      },
+      "id": "enrich-variants-001",
+      "name": "Enrich Variants",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3472,
+        656
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3264,
+        656
+      ],
+      "id": "efddefac-184b-4d3c-b3cb-9ad052a0cb42",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "content": "AUTOMATED PRICING SYSTEM — OVERVIEW\n\nPurpose: Automatically manages prices for slow-selling shoes\n\nHow it works:\n• Runs daily at 2:00 AM (Berlin time)\n• Only affects shoes with Tag 16 or Tag 17\n• Reduces price by €1 every 3 days with no sales\n• Increases price by €2 when a shoe sells\n• Never goes below a calculated minimum price\n• Resets to original price after 7 days at minimum (adds Tag 15)\n\nLogs everything to Google Sheets for complete audit trail.\n\nNOTE: Change manual trigger to cron trigger for production.",
+        "height": 352,
+        "width": 544,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -160,
+        528
+      ],
+      "typeVersion": 1,
+      "id": "1598be02-0c58-4ca9-ba6a-ce8dca3b7d62",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "STEP 1: LOGIN & FETCH DATA\n\nThis section:\n1. Logs into PlentyOne automatically\n2. Fetches all shoes with Tag 16 and Tag 17\n3. Fetches all orders from the last 24 hours\n\nWhat to check:\n• All nodes should show green checkmarks\n• If red, check credentials or API connection\n• Tag 16 and Tag 17 streams run simultaneously",
+        "height": 832,
+        "width": 752
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        544,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "dfe7ab9b-94e3-42e5-b20f-2969c4b4d06d",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "TAG 16 & TAG 17 STREAMS\n\nTag 16 and Tag 17 have different minimum price formulas:\n• Tag 16: ((EK + 3.84) / 0.81 / 0.89) + 8.96\n• Tag 17: ((EK + 0.84) / 0.81 / 0.89) + 8.96\n\nEK = purchase price (from PlentyOne)\n\nThese formulas are applied automatically in the \"floorPrice\" calculation nodes.",
+        "height": 864,
+        "width": 672
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1312,
+        480
+      ],
+      "typeVersion": 1,
+      "id": "1a31fbbf-c8cf-4e0e-bf0f-dff895b73278",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "POSITIVE STOCK FILTER\n\nOnly shoes with stock > 0 are processed.\nWhy? No need to price shoes we don't have.\n\nIf a shoe sells and stock becomes 0:\n• It will not appear in pricing decisions\n• Will reappear automatically when restocked\n• Sale is still recorded in Google Sheets state",
+        "height": 256,
+        "width": 480
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2256,
+        928
+      ],
+      "typeVersion": 1,
+      "id": "904b8b06-cc92-4813-9e22-531fecb62815",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "STATE SHEET — REMEMBERING EACH SHOE\n\nThe State sheet (Google Sheets) tracks:\n• Current stage (Uninitiated, Stage 1, Stage 2, At Floor, Reset)\n• Last price change date\n• Last sale date\n• Days at floor counter\n\nThis is the system's \"memory\" — without it, every day would be Day 1.\n\nFirst run: The sheet will be empty. That's normal — it fills up over time.",
+        "height": 336,
+        "width": 432
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2800,
+        896
+      ],
+      "typeVersion": 1,
+      "id": "9c2f57d3-4f77-4a01-9286-47b9d3b7dc91",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "SOLD TODAY DETECTION\n\nThis section:\n1. Fetches all orders from last 24 hours\n2. Extracts which shoe variations sold\n3. Updates the State sheet with new sale date\n4. Flags the variant as \"sold today\" for pricing decisions\n\nWhy this matters: Sales trigger a €2 price increase.",
+        "height": 320,
+        "width": 544
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1440,
+        144
+      ],
+      "typeVersion": 1,
+      "id": "301983db-8ea4-40f0-be7f-c642385a0283",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "MERGING ALL DATA\n\nThis section combines:\n• Current variant data (from PlentyOne)\n• Historical state (from Google Sheets)\n• Recent sales data (from orders)\n\nThen calculates:\n• Days since last price change\n• Days since last sale\n• Whether the shoe sold today\n\nResult: Each shoe now has everything needed to make a pricing decision.",
+        "height": 544,
+        "width": 528
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3344,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "97865a28-a04a-4126-9306-1509b418e156",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "DAILY OPERATION\n\nThe workflow runs automatically at 2:00 AM Berlin time.\n\nTo run manually:\n1. Click the \"Execute Workflow\" button\n2. Wait for all nodes to turn green\n3. Check Google Sheets to verify changes\n\nTo add new shoes to the system:\n1. Add Tag 16 or Tag 17 to the shoe in PlentyOne\n2. Ensure stock is positive\n3. Run the workflow — it will appear automatically\n\nWhat to check daily:\n• Google Sheets → State tab (see current stages)\n• Google Sheets → Price Change Log (verify changes)\n• Google Sheets → Errors tab (resolve any issues)",
+        "height": 432,
+        "width": 544,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -160,
+        896
+      ],
+      "typeVersion": 1,
+      "id": "a77d21c2-b2fd-47a1-bf9b-54b2e5f83169",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://YOUR_INSTANCE.my.plentysystems.com/rest/items/{{ $json.itemId }}/variations/{{ $json.variantId }}/variation_sales_prices/17",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Access Token').item.json.access_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ price: $json.newPrice17 }) }}",
+        "options": {}
+      },
+      "id": "72a41833-4a2a-4ed4-ba0b-646b31899fd1",
+      "name": "POST Price — Stage ",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        4192,
+        800
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://YOUR_INSTANCE.my.plentysystems.com/rest/items/{{ $json.itemId }}/variations/{{ $json.variantId }}/variation_sales_prices/17",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Access Token').item.json.access_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ price: $json.newPrice17 }) }}",
+        "options": {}
+      },
+      "id": "75cdb3b1-7b7e-4aed-ac63-aaa80498ff6d",
+      "name": "PUT Price — Stage ",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        4192,
+        992
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "content": "DECISION ROUTER — PRICING RULES\n\nRules are checked in this order (first match wins):\n\n1) SOLD TODAY → Increase price by €2 (capped at original price)\n\n2) AT MINIMUM for 7+ days → Reset to original price + add Tag 15\n\n3) NEVER PRICED before + 3+ days no sales → Stage 1: original price minus €1\n\n4) ALREADY PRICED + 3+ days no sales → Stage 2: current price minus €1\n\n5) None of the above → Skip (no change)\n\nRules are applied automatically based on each shoe's sales history.",
+        "height": 1200,
+        "width": 400
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3936,
+        -48
+      ],
+      "typeVersion": 1,
+      "id": "01c1eb31-8086-4c9e-acbc-0af40d87a502",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "EXECUTING PRICE CHANGES\n\nEach pricing rule triggers an API call to PlentyOne:\n\n• Sale Increase: Updates Price 17 (dynamic price)\n• Reset: Restores Price 17 + adds Tag 15\n• Stage 1: Creates Price 17 + assigns special UUID\n• Stage 2: Updates Price 17\n\nIf any API call fails, the error is logged but other variants continue processing.",
+        "height": 1200,
+        "width": 480
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4336,
+        144
+      ],
+      "typeVersion": 1,
+      "id": "2b1d2278-0244-4412-893a-3e48f6544b2d",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "content": "LOGGING — EVERY CHANGE TRACKED\n\nThree Google Sheets tabs:\n\n1. State Sheet — Current status of each shoe\n   • Updated after every price change\n\n2. Price Change Log — Complete history\n   • Every price change, with old price, new price, reason, stage\n\n3. Errors — Any failures\n   • Timestamp, variant ID, action type, error message\n\nCheck these sheets to verify the system is working correctly.",
+        "height": 1344,
+        "width": 704
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4816,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "4bc1efdd-9dcb-4698-97c1-26f1111756f0",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.soldToday }}",
+                    "rightValue": true,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true"
+                    },
+                    "id": "7bcc4c3c-6459-4251-9c78-5da1b7b40b2f"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "sale_increase"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.currentPrice17 }}",
+                    "rightValue": "={{ $json.floorPrice }}",
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "dc5e11f6-e1bf-4fbc-a8a1-9185a32229f5"
+                  },
+                  {
+                    "leftValue": "={{ $json.daysAtFloorCounter }}",
+                    "rightValue": 7,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gte"
+                    },
+                    "id": "4952483e-e87e-4382-9bf0-734318761175"
+                  },
+                  {
+                    "leftValue": "={{ $json.soldToday }}",
+                    "rightValue": false,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false"
+                    },
+                    "id": "aafccaa3-5a66-490b-864c-02140c5091b3"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "reset"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.currentPrice17 === null || $json.currentPrice17 === 0 }}",
+                    "rightValue": true,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true"
+                    },
+                    "id": "ad038b77-aac5-4502-96e6-b962dca646ae"
+                  },
+                  {
+                    "leftValue": "={{ $json.daysSinceLastSale }}",
+                    "rightValue": 3,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gte"
+                    },
+                    "id": "ec8e329b-17eb-47dd-8d9e-2d204a0668cb"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "stage1_init"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.currentPrice17 }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gt"
+                    },
+                    "id": "20ce5bca-81a5-430d-a0c9-5536fd03e504"
+                  },
+                  {
+                    "leftValue": "={{ $json.daysSinceLastChange }}",
+                    "rightValue": 3,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gte"
+                    },
+                    "id": "62ad64ec-8b89-40d2-a43b-2beb29600c8e"
+                  },
+                  {
+                    "leftValue": "={{ $json.soldToday }}",
+                    "rightValue": false,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false"
+                    },
+                    "id": "3129b0e2-a431-4bf0-a0a1-2e3518dfd874"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "stage2_reduction"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "skip"
+        }
+      },
+      "id": "ac90a468-360c-494f-8efb-48f001568248",
+      "name": "Decision Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        3744,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "si-001",
+              "name": "newPrice17",
+              "value": "={{ Math.round(Math.min($json.currentPrice17 + 2, $json.price3) * 100) / 100 }}",
+              "type": "number"
+            },
+            {
+              "id": "si-002",
+              "name": "actionType",
+              "value": "Sale Increase",
+              "type": "string"
+            },
+            {
+              "id": "si-003",
+              "name": "newStage",
+              "value": "={{ $json.currentStage }}",
+              "type": "string"
+            },
+            {
+              "id": "si-004",
+              "name": "newDaysAtFloor",
+              "value": "={{ $json.daysAtFloorCounter }}",
+              "type": "number"
+            },
+            {
+              "id": "si-005",
+              "name": "reason",
+              "value": "Sold today — price increased by €2, capped at price3",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "fba12b9c-f5d8-4534-b880-f9bca722cae1",
+      "name": "Calc Sale Increase Price",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3984,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "plentyone",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Price Change Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ new Date().toLocaleString('de-DE', {timeZone: 'Europe/Berlin'}) }}",
+            "Variant ID": "={{ $('Calc Sale Increase Price').item.json.variantId }}",
+            "Stage": "Sale Increase",
+            "Reason": "={{ $('Calc Sale Increase Price').item.json.reason }}",
+            "Variant Name": "={{ $('Calc Sale Increase Price').item.json.number }}",
+            "Tag Type": "={{ $('Calc Sale Increase Price').item.json.tagId }}",
+            "Old Price ID 17": "={{ $('Calc Sale Increase Price').item.json.currentPrice17 }}",
+            "New Price ID 17": "={{ $('Calc Sale Increase Price').item.json.newPrice17 }}",
+            "Start Price (ID 3)": "={{ $('Calc Sale Increase Price').item.json.price3 }}",
+            "Min Price": "={{ $('Calc Sale Increase Price').item.json.floorPrice }}",
+            "EK": "={{ $('Calc Sale Increase Price').item.json.EK }}",
+            "Days Since Last Sale": "={{ $('Calc Sale Increase Price').item.json.daysSinceLastSale }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Variant ID",
+              "displayName": "Variant ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Variant Name",
+              "displayName": "Variant Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Tag Type",
+              "displayName": "Tag Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Stage",
+              "displayName": "Stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Old Price ID 17",
+              "displayName": "Old Price ID 17",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "New Price ID 17",
+              "displayName": "New Price ID 17",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Start Price (ID 3)",
+              "displayName": "Start Price (ID 3)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Min Price",
+              "displayName": "Min Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "EK",
+              "displayName": "EK",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Days Since Last Sale",
+              "displayName": "Days Since Last Sale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "5e7bbed8-2c0d-47e3-a32d-9b00d87683e2",
+      "name": "Log Sale Increase",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4656,
+        384
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "YOUR_GOOGLE_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "r-001",
+              "name": "newPrice17",
+              "value": "={{ $json.price3 }}",
+              "type": "number"
+            },
+            {
+              "id": "r-002",
+              "name": "actionType",
+              "value": "Reset",
+              "type": "string"
+            },
+            {
+              "id": "r-003",
+              "name": "newStage",
+              "value": "RESET",
+              "type": "string"
+            },
+            {
+              "id": "r-004",
+              "name": "newDaysAtFloor",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "r-005",
+              "name": "reason",
+              "value": "7+ days at floor with no sales — restoring price3 and adding Tag 15",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "d714c302-29db-45fd-b835-291288d992d4",
+      "name": "Calc Reset Price",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3968,
+        592
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "s1-001",
+              "name": "newPrice17",
+              "value": "={{ Math.round(Math.max($json.price3 - 1, $json.floorPrice) * 100) / 100 }}",
+              "type": "number"
+            },
+            {
+              "id": "s1-002",
+              "name": "actionType",
+              "value": "Stage 1 Init",
+              "type": "string"
+            },
+            {
+              "id": "s1-003",
+              "name": "newStage",
+              "value": "STAGE_1",
+              "type": "string"
+            },
+            {
+              "id": "s1-004",
+              "name": "newDaysAtFloor",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "s1-005",
+              "name": "reason",
+              "value": "No sale in 3+ days — initialising price17 at price3-1 (min floor)",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "1963d633-a5ae-4fb5-bc50-b3b0e0c116b1",
+      "name": "Calc Stage 1 Price",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3968,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "s2-001",
+              "name": "newPrice17",
+              "value": "={{ Math.round(Math.max($json.currentPrice17 - 1, $json.floorPrice) * 100) / 100 }}",
+              "type": "number"
+            },
+            {
+              "id": "s2-002",
+              "name": "actionType",
+              "value": "Stage 2 Reduction",
+              "type": "string"
+            },
+            {
+              "id": "s2-003",
+              "name": "newStage",
+              "value": "={{ (Math.round(Math.max($json.currentPrice17 - 1, $json.floorPrice) * 100) / 100) === $json.floorPrice ? 'AT_FLOOR' : 'STAGE_2' }}",
+              "type": "string"
+            },
+            {
+              "id": "s2-004",
+              "name": "newDaysAtFloor",
+              "value": "={{ (Math.round(Math.max($json.currentPrice17 - 1, $json.floorPrice) * 100) / 100) === $json.floorPrice ? ($json.daysAtFloorCounter + 1) : 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "s2-005",
+              "name": "reason",
+              "value": "3+ days since last change, no sale — reducing price17 by €1",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "bd8207ef-7c1d-470d-ad32-798f84740a6f",
+      "name": "Calc Stage 2 Price",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3968,
+        992
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://YOUR_INSTANCE.my.plentysystems.com/rest/items/{{ $json.itemId }}/variations/{{ $json.variantId }}/variation_sales_prices/17",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Access Token').item.json.access_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ price: $json.newPrice17 }) }}",
+        "options": {}
+      },
+      "id": "a3f50d57-0f46-4f44-bd8d-75242f76ffdc",
+      "name": "PUT Price — Sale Increase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        4192,
+        368
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://YOUR_INSTANCE.my.plentysystems.com/rest/items/{{ $json.itemId }}/variations/{{ $json.variantId }}/variation_sales_prices/17",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Access Token').item.json.access_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ price: $json.newPrice17 }) }}",
+        "options": {}
+      },
+      "id": "3d9b0943-4194-48b6-a768-3c04cd9c8c29",
+      "name": "PUT Price — Reset",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        4192,
+        592
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "err-si-001",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "cec4593e-63af-43d0-8ee9-a6af1cc4ad99",
+      "name": "IF Error — Sale Increase",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4432,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "err-r-001",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4f4f7f23-0ad7-4b5e-8019-4e10e609e026",
+      "name": "IF Error — Reset Price",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4416,
+        592
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "err-s2-001",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "5617167d-494b-4d71-a8cd-e1003c8b4899",
+      "name": "IF Error — Stage 2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4416,
+        992
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "err-s1-001",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "cb04ae6e-d009-435d-92c6-9e6de93f4b85",
+      "name": "IF Error — Stage 1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4416,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "plentyone",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1337530130,
+          "mode": "list",
+          "cachedResultName": "Errors",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=1337530130"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ new Date().toLocaleString('de-DE', {timeZone: 'Europe/Berlin'}) }}",
+            "Variant ID": "={{ $json.variantId ?? 'N/A' }}",
+            "Error Message": "={{ $json.error?.message ?? JSON.stringify($json.error) }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Variant ID",
+              "displayName": "Variant ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Node Name",
+              "displayName": "Node Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Error Message",
+              "displayName": "Error Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "1ff5e6f2-e94a-4814-8305-84df5c607141",
+      "name": "Log Error",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4720,
+        640
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "YOUR_GOOGLE_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "plentyone",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1061434173,
+          "mode": "list",
+          "cachedResultName": "State",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=1061434173"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Variant ID": "={{ $('Calc Sale Increase Price').item.json.variantId }}",
+            "Variant Nr": "={{ $('Calc Sale Increase Price').item.json.number }}",
+            "Item ID": "={{ $('Calc Sale Increase Price').item.json.itemId }}",
+            "Tag ID": "={{ $('Calc Sale Increase Price').item.json.tagId }}",
+            "Current Stage": "={{ $('Calc Sale Increase Price').item.json.newStage }}",
+            "Price ID 3": "={{ $('Calc Sale Increase Price').item.json.price3 }}",
+            "Current Price 17": "={{ $('Calc Sale Increase Price').item.json.newPrice17 }}",
+            "EK": "={{ $('Calc Sale Increase Price').item.json.EK }}",
+            "Floor Price": "={{ $('Calc Sale Increase Price').item.json.floorPrice }}",
+            "Last Price Change": "={{ new Date().toISOString() }}",
+            "Last Sale Date": "={{ new Date().toISOString() }}",
+            "Days at Floor": "={{ $('Calc Sale Increase Price').item.json.newDaysAtFloor }}",
+            "Days No Sale": "0"
+          },
+          "matchingColumns": [
+            "Variant ID"
+          ],
+          "schema": [
+            {
+              "id": "Variant ID",
+              "displayName": "Variant ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Variant Nr",
+              "displayName": "Variant Nr",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Tag ID",
+              "displayName": "Tag ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Current Stage",
+              "displayName": "Current Stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Price ID 3",
+              "displayName": "Price ID 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Current Price 17",
+              "displayName": "Current Price 17",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "EK",
+              "displayName": "EK",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Floor Price",
+              "displayName": "Floor Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Last Price Change",
+              "displayName": "Last Price Change",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Last Sale Date",
+              "displayName": "Last Sale Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Days at Floor",
+              "displayName": "Days at Floor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Days No Sale",
+              "displayName": "Days No Sale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "96c7e8f0-2bf5-4ad2-9629-6feaf8f37628",
+      "name": "Update State — Sale Increase",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4880,
+        384
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "YOUR_GOOGLE_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "plentyone",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1061434173,
+          "mode": "list",
+          "cachedResultName": "State",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=1061434173"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Variant ID": "={{ $('Calc Reset Price').item.json.variantId }}",
+            "Variant Nr": "={{ $('Calc Reset Price').item.json.number }}",
+            "Item ID": "={{ $('Calc Reset Price').item.json.itemId }}",
+            "Tag ID": "={{ $('Calc Reset Price').item.json.tagId }}",
+            "Current Stage": "RESET",
+            "Price ID 3": "={{ $('Calc Reset Price').item.json.price3 }}",
+            "Current Price 17": "={{ $('Calc Reset Price').item.json.newPrice17 }}",
+            "EK": "={{ $('Calc Reset Price').item.json.EK }}",
+            "Floor Price": "={{ $('Calc Reset Price').item.json.floorPrice }}",
+            "Last Price Change": "={{ new Date().toISOString() }}",
+            "Last Sale Date": "={{ $('Calc Reset Price').item.json.lastSaleDate }}",
+            "Days at Floor": "0",
+            "Days No Sale": "={{ $('Calc Reset Price').item.json.daysSinceLastSale }}"
+          },
+          "matchingColumns": [
+            "Variant ID"
+          ],
+          "schema": [
+            {
+              "id": "Variant ID",
+              "displayName": "Variant ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Variant Nr",
+              "displayName": "Variant Nr",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tag ID",
+              "displayName": "Tag ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Current Stage",
+              "displayName": "Current Stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Price ID 3",
+              "displayName": "Price ID 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Current Price 17",
+              "displayName": "Current Price 17",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "EK",
+              "displayName": "EK",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Floor Price",
+              "displayName": "Floor Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Price Change",
+              "displayName": "Last Price Change",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Sale Date",
+              "displayName": "Last Sale Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Days at Floor",
+              "displayName": "Days at Floor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Days No Sale",
+              "displayName": "Days No Sale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "219345a2-3560-45b9-a374-a18310e5635c",
+      "name": "Update State — Reset",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        5088,
+        848
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "YOUR_GOOGLE_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "plentyone",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Price Change Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ new Date().toLocaleString('de-DE', {timeZone: 'Europe/Berlin'}) }}",
+            "Variant ID": "={{ $('Calc Reset Price').item.json.variantId }}",
+            "Stage": "Reset",
+            "Reason": "={{ $('Calc Reset Price').item.json.reason }}",
+            "Variant Name": "={{ $('Calc Reset Price').item.json.number }}",
+            "Tag Type": "={{ $('Calc Reset Price').item.json.tagId }}",
+            "Old Price ID 17": "={{ $('Calc Reset Price').item.json.currentPrice17 }}",
+            "New Price ID 17": "={{ $('Calc Reset Price').item.json.newPrice17 }}",
+            "Start Price (ID 3)": "={{ $('Calc Reset Price').item.json.price3 }}",
+            "Min Price": "={{ $('Calc Reset Price').item.json.floorPrice }}",
+            "EK": "={{ $('Calc Reset Price').item.json.EK }}",
+            "Days Since Last Sale": "={{ $('Calc Reset Price').item.json.daysSinceLastSale }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Variant ID",
+              "displayName": "Variant ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Variant Name",
+              "displayName": "Variant Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Tag Type",
+              "displayName": "Tag Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Stage",
+              "displayName": "Stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Old Price ID 17",
+              "displayName": "Old Price ID 17",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "New Price ID 17",
+              "displayName": "New Price ID 17",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Start Price (ID 3)",
+              "displayName": "Start Price (ID 3)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Min Price",
+              "displayName": "Min Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "EK",
+              "displayName": "EK",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Days Since Last Sale",
+              "displayName": "Days Since Last Sale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "88bfeae6-dc9b-45f7-9993-cca57ef4654c",
+      "name": "Log Reset",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4864,
+        848
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "YOUR_GOOGLE_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "plentyone",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Price Change Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ new Date().toLocaleString('de-DE', {timeZone: 'Europe/Berlin'}) }}",
+            "Variant ID": "={{ $('Calc Stage 2 Price').item.json.variantId }}",
+            "Stage": "={{ $('Calc Stage 2 Price').item.json.newStage }}",
+            "Reason": "={{ $('Calc Stage 2 Price').item.json.reason }}",
+            "Days Since Last Sale": "={{ $('Calc Stage 2 Price').item.json.daysSinceLastSale }}",
+            "Variant Name": "={{ $('Calc Stage 2 Price').item.json.number }}",
+            "Tag Type": "={{ $('Calc Stage 2 Price').item.json.tagId }}",
+            "Old Price ID 17": "={{ $('Calc Stage 2 Price').item.json.currentPrice17 }}",
+            "New Price ID 17": "={{ $('Calc Stage 2 Price').item.json.newPrice17 }}",
+            "Start Price (ID 3)": "={{ $('Calc Stage 2 Price').item.json.price3 }}",
+            "Min Price": "={{ $('Calc Stage 2 Price').item.json.floorPrice }}",
+            "EK": "={{ $('Calc Stage 2 Price').item.json.EK }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Variant ID",
+              "displayName": "Variant ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Variant Name",
+              "displayName": "Variant Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Tag Type",
+              "displayName": "Tag Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Stage",
+              "displayName": "Stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Old Price ID 17",
+              "displayName": "Old Price ID 17",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "New Price ID 17",
+              "displayName": "New Price ID 17",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Start Price (ID 3)",
+              "displayName": "Start Price (ID 3)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Min Price",
+              "displayName": "Min Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "EK",
+              "displayName": "EK",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Days Since Last Sale",
+              "displayName": "Days Since Last Sale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "88cd70f3-9d79-48e6-b2cf-d59b30464da2",
+      "name": "Log Stage 2",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4640,
+        1232
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "YOUR_GOOGLE_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "plentyone",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1061434173,
+          "mode": "list",
+          "cachedResultName": "State",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=1061434173"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Variant ID": "={{ $('Calc Stage 2 Price').item.json.variantId }}",
+            "Variant Nr": "={{ $('Calc Stage 2 Price').item.json.number }}",
+            "Item ID": "={{ $('Calc Stage 2 Price').item.json.itemId }}",
+            "Tag ID": "={{ $('Calc Stage 2 Price').item.json.tagId }}",
+            "Current Stage": "={{ $('Calc Stage 2 Price').item.json.newStage }}",
+            "Price ID 3": "={{ $('Calc Stage 2 Price').item.json.price3 }}",
+            "Current Price 17": "={{ $('Calc Stage 2 Price').item.json.currentPrice17 }}",
+            "EK": "={{ $('Calc Stage 2 Price').item.json.EK }}",
+            "Floor Price": "={{ $('Calc Stage 2 Price').item.json.floorPrice }}",
+            "Last Price Change": "={{ new Date().toISOString() }}",
+            "Last Sale Date": "={{ $('Calc Stage 2 Price').item.json.lastSaleDate }}",
+            "Days at Floor": "={{ $('Calc Stage 2 Price').item.json.newDaysAtFloor }}",
+            "Days No Sale": "={{ $('Calc Stage 2 Price').item.json.daysSinceLastSale }}"
+          },
+          "matchingColumns": [
+            "Variant ID"
+          ],
+          "schema": [
+            {
+              "id": "Variant ID",
+              "displayName": "Variant ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Variant Nr",
+              "displayName": "Variant Nr",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tag ID",
+              "displayName": "Tag ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Current Stage",
+              "displayName": "Current Stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Price ID 3",
+              "displayName": "Price ID 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Current Price 17",
+              "displayName": "Current Price 17",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "EK",
+              "displayName": "EK",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Floor Price",
+              "displayName": "Floor Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Price Change",
+              "displayName": "Last Price Change",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Sale Date",
+              "displayName": "Last Sale Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Days at Floor",
+              "displayName": "Days at Floor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Days No Sale",
+              "displayName": "Days No Sale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "5ee5fe9b-7d8f-4a13-b9b2-60d04145c7e8",
+      "name": "Update State — Stage 2",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4864,
+        1232
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "YOUR_GOOGLE_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "plentyone",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1061434173,
+          "mode": "list",
+          "cachedResultName": "State",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=1061434173"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Variant ID": "={{ $('Calc Stage 1 Price').item.json.variantId }}",
+            "Variant Nr": "={{ $('Calc Stage 1 Price').item.json.number }}",
+            "Item ID": "={{ $('Calc Stage 1 Price').item.json.itemId }}",
+            "Tag ID": "={{ $('Calc Stage 1 Price').item.json.tagId }}",
+            "Current Stage": "STAGE_1",
+            "Price ID 3": "={{ $('Calc Stage 1 Price').item.json.price3 }}",
+            "Current Price 17": "={{ $('Calc Stage 1 Price').item.json.newPrice17 }}",
+            "EK": "={{ $('Calc Stage 1 Price').item.json.EK }}",
+            "Floor Price": "={{ $('Calc Stage 1 Price').item.json.floorPrice }}",
+            "Last Price Change": "={{ new Date().toISOString() }}",
+            "Last Sale Date": "={{ $('Calc Stage 1 Price').item.json.lastSaleDate }}",
+            "Days at Floor": "0",
+            "Days No Sale": "={{ $('Calc Stage 1 Price').item.json.daysSinceLastSale }}"
+          },
+          "matchingColumns": [
+            "Variant ID"
+          ],
+          "schema": [
+            {
+              "id": "Variant ID",
+              "displayName": "Variant ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Variant Nr",
+              "displayName": "Variant Nr",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tag ID",
+              "displayName": "Tag ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Current Stage",
+              "displayName": "Current Stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Price ID 3",
+              "displayName": "Price ID 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Current Price 17",
+              "displayName": "Current Price 17",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "EK",
+              "displayName": "EK",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Floor Price",
+              "displayName": "Floor Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Price Change",
+              "displayName": "Last Price Change",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Sale Date",
+              "displayName": "Last Sale Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Days at Floor",
+              "displayName": "Days at Floor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Days No Sale",
+              "displayName": "Days No Sale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "ae51f54a-ea43-4ce8-ad72-b4b229913e2d",
+      "name": "Update State — Stage 1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        5088,
+        1040
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "YOUR_GOOGLE_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "plentyone",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Price Change Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ new Date().toLocaleString('de-DE', {timeZone: 'Europe/Berlin'}) }}",
+            "Variant ID": "={{ $('Calc Stage 1 Price').item.json.variantId }}",
+            "Reason": "={{ $('Calc Stage 1 Price').item.json.reason }}",
+            "Stage": "={{ $('Calc Stage 1 Price').item.json.newStage }}",
+            "Variant Name": "={{ $('Calc Stage 1 Price').item.json.number }}",
+            "Tag Type": "={{ $('Calc Stage 1 Price').item.json.tagId }}",
+            "Old Price ID 17": "={{ $('Calc Stage 1 Price').item.json.currentPrice17 }}",
+            "New Price ID 17": "={{ $('Calc Stage 1 Price').item.json.newPrice17 }}",
+            "Start Price (ID 3)": "={{ $('Calc Stage 1 Price').item.json.price3 }}",
+            "Min Price": "={{ $('Calc Stage 1 Price').item.json.floorPrice }}",
+            "EK": "={{ $('Calc Stage 1 Price').item.json.EK }}",
+            "Days Since Last Sale": "={{ $('Calc Stage 1 Price').item.json.daysSinceLastSale }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Variant ID",
+              "displayName": "Variant ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Variant Name",
+              "displayName": "Variant Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tag Type",
+              "displayName": "Tag Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Stage",
+              "displayName": "Stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Old Price ID 17",
+              "displayName": "Old Price ID 17",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "New Price ID 17",
+              "displayName": "New Price ID 17",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Start Price (ID 3)",
+              "displayName": "Start Price (ID 3)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Min Price",
+              "displayName": "Min Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "EK",
+              "displayName": "EK",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Days Since Last Sale",
+              "displayName": "Days Since Last Sale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "eefa2928-95ad-4ed9-9192-1dc2beed9c84",
+      "name": "Log Stage 1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4864,
+        1040
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "YOUR_GOOGLE_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://YOUR_INSTANCE.my.plentysystems.com/rest/items/{{ $('Calc Stage 1 Price').item.json.itemId }}/variations/{{ $('Calc Stage 1 Price').item.json.variantId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Access Token').item.json.access_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"priceCalculationUuid\": \"YOUR_PRICE_CALCULATION_UUID\"}",
+        "options": {}
+      },
+      "id": "7d4c2a40-a5c2-48ec-97d2-57b26e30c227",
+      "name": "PUT Price Calc UUID",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        4640,
+        1040
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://YOUR_INSTANCE.my.plentysystems.com/rest/items/{{ $('Calc Reset Price').item.json.itemId }}/variations/{{ $('Calc Reset Price').item.json.variantId }}/variation_tags",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Access Token').item.json.access_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"tagId\": 15}",
+        "options": {}
+      },
+      "id": "12ed2373-929d-4165-99f5-016a41267994",
+      "name": "POST Tag 15 — Reset",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        4640,
+        848
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 2
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        416,
+        800
+      ],
+      "id": "34efc418-0849-43ac-bbfc-bdda48d3e36e",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Fetch Access Token": {
+      "main": [
+        [
+          {
+            "node": "Fetch Recent Orders (last 24h)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Item Variations Tag ID 16",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Item Variations Tag ID 17",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Item Variations Tag ID 16": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Item Variations Tag ID 17": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "floorPrice16 Calculation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Set fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge Variant with soldId",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Merge Variants with State",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Recent Orders (last 24h)": {
+      "main": [
+        [
+          {
+            "node": "Extract Sold IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Sold IDs": {
+      "main": [
+        [
+          {
+            "node": "Merge Variant with soldId",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Merge Variants with State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "floorPrice16 Calculation": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "floorPrice17 Calculation": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set fields": {
+      "main": [
+        [
+          {
+            "node": "floorPrice17 Calculation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Variants with State": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Variant with soldId": {
+      "main": [
+        [
+          {
+            "node": "Update Last Sale Date & Days No Sale",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrich Variants": {
+      "main": [
+        [
+          {
+            "node": "Decision Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Enrich Variants",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Last Sale Date & Days No Sale": {
+      "main": [
+        []
+      ]
+    },
+    "POST Price — Stage ": {
+      "main": [
+        [
+          {
+            "node": "IF Error — Stage 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PUT Price — Stage ": {
+      "main": [
+        [
+          {
+            "node": "IF Error — Stage 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Decision Router": {
+      "main": [
+        [
+          {
+            "node": "Calc Sale Increase Price",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Calc Reset Price",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Calc Stage 1 Price",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Calc Stage 2 Price",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calc Sale Increase Price": {
+      "main": [
+        [
+          {
+            "node": "PUT Price — Sale Increase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Sale Increase": {
+      "main": [
+        [
+          {
+            "node": "Update State — Sale Increase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calc Reset Price": {
+      "main": [
+        [
+          {
+            "node": "PUT Price — Reset",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calc Stage 1 Price": {
+      "main": [
+        [
+          {
+            "node": "POST Price — Stage ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calc Stage 2 Price": {
+      "main": [
+        [
+          {
+            "node": "PUT Price — Stage ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PUT Price — Sale Increase": {
+      "main": [
+        [
+          {
+            "node": "IF Error — Sale Increase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PUT Price — Reset": {
+      "main": [
+        [
+          {
+            "node": "IF Error — Reset Price",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Error — Sale Increase": {
+      "main": [
+        [
+          {
+            "node": "Log Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Sale Increase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Error — Reset Price": {
+      "main": [
+        [
+          {
+            "node": "Log Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "POST Tag 15 — Reset",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Error — Stage 2": {
+      "main": [
+        [
+          {
+            "node": "Log Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Stage 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Error — Stage 1": {
+      "main": [
+        [
+          {
+            "node": "Log Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PUT Price Calc UUID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Reset": {
+      "main": [
+        [
+          {
+            "node": "Update State — Reset",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Stage 2": {
+      "main": [
+        [
+          {
+            "node": "Update State — Stage 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Stage 1": {
+      "main": [
+        [
+          {
+            "node": "Update State — Stage 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PUT Price Calc UUID": {
+      "main": [
+        [
+          {
+            "node": "Log Stage 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST Tag 15 — Reset": {
+      "main": [
+        [
+          {
+            "node": "Log Reset",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch Access Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "timezone": "Europe/Berlin",
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed"
+  },
+  "versionId": "04484721-ce1b-4523-b41a-beb55699e9c4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b869b20f75e3e1961683ca42096ce86c8fd86429873d6a81e27acb93550986ab"
+  },
+  "id": "YOUR_WORKFLOW_ID",
+  "tags": []
+}
